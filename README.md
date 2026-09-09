@@ -94,9 +94,9 @@ avec un plafond de **200 itérations**. Aucun test de dégénérescence n'est im
 
 ## Reproductibilité
 
-- **R** — code en base R uniquement (`dnorm`, `rnorm`, `runif`, `ks.test`), aucun package externe requis. Testé sur R 4.x.
-- **Graine** — `set.seed(42)` est fixée avant chaque simulation, les résultats sont donc reproductibles à l'identique.
-- **Temps d'exécution** — environ 3 secondes pour n = 1000, près d'une minute pour n = 40 000 (mesures du rapport).
+- **R** — code en base R uniquement (`dnorm`, `rnorm`, `runif`, `ks.test`), aucun package externe requis. Testé sur R 4.4.2.
+- **Données** — les échantillons sont simulés à chaque exécution, sans graine fixée : les valeurs obtenues varient donc légèrement d'un run à l'autre autour de celles reportées ici.
+- **Temps d'exécution** — environ 3 secondes pour n = 1000, près d'une minute pour n = 40 000.
 
 ---
 
@@ -176,8 +176,6 @@ Rscript code/em_3_gaussiennes.R
 Rscript code/em_5_gaussiennes.R
 Rscript code/em_3_gaussiennes_proches.R
 ```
-
-Le premier script régénère `figures/convergence_em.png`.
 
 Pour l'application Iris, le script lit `Iris.csv` dans son propre dossier :
 
