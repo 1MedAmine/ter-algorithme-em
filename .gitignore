@@ -1,0 +1,32 @@
+# R
+.Rhistory
+.RData
+.Rapp.history
+.Rproj.user/
+.Renviron
+
+# Sorties graphiques generees
+Rplots.pdf
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+
+# Archives et bases redondantes
+*.zip
+*.sqlite
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
