@@ -25,111 +25,107 @@ La distribution des tailles observées est alors un mélange de J gaussiennes. L
 - **presentation/** — slides de soutenance sur la convergence de l'EM
 - **code/** — implémentation R :
   - `em_3_gaussiennes.R` — cas de référence, composantes bien séparées
-    - `em_3_gaussiennes_proches.R` — composantes qui se chevauchent
-      - `em_5_gaussiennes.R` — influence du nombre de composantes
-        - `iris/iris_em.R` — application au dataset Iris
+  - `em_3_gaussiennes_proches.R` — composantes qui se chevauchent
+  - `em_5_gaussiennes.R` — influence du nombre de composantes
+  - `iris/iris_em.R` — application au dataset Iris
 
-        ---
+---
 
-        ## Contenu du rapport
+## Contenu du rapport
 
-        **1. Modèle** — modélisation par mélange de lois gaussiennes, variable latente, densités jointe, marginales et conditionnelles, formule de responsabilité obtenue par la formule de Bayes.
+**1. Modèle** — modélisation par mélange de lois gaussiennes, variable latente, densités jointe, marginales et conditionnelles, formule de responsabilité obtenue par la formule de Bayes.
 
-        **2. Situation favorable mais irréaliste** — estimation lorsque les étiquettes Z sont connues, et pourquoi ce cadre ne suffit pas.
+**2. Situation favorable mais irréaliste** — estimation lorsque les étiquettes Z sont connues, et pourquoi ce cadre ne suffit pas.
 
-        **3. Résolution du vrai problème** — le coeur théorique :
+**3. Résolution du vrai problème** — le cœur théorique :
 
-        - Théorème de la log-vraisemblance conditionnelle et son maximum
-        - Dérivation des formules de mise à jour des paramètres
-        - **Théorème de croissance de la vraisemblance observée** (démonstration complète)
-        - Limites du résultat de monotonie
-        - Convergence vers un point stationnaire — Dempster, Laird et Rubin (1977)
-        - Conditions suffisantes de convergence — Wu (1983)
+- Théorème de la log-vraisemblance conditionnelle et son maximum
+- Dérivation des formules de mise à jour des paramètres
+- **Théorème de croissance de la vraisemblance observée** (démonstration complète)
+- Limites du résultat de monotonie
+- Convergence vers un point stationnaire — Dempster, Laird et Rubin (1977)
+- Conditions suffisantes de convergence — Wu (1983)
 
-        **4. Applications numériques** — validation sur données simulées, puis sur données réelles.
+**4. Applications numériques** — validation sur données simulées, puis sur données réelles.
 
-        ---
+---
 
-        ## Résultats
+## Résultats
 
-        ### Validation sur données simulées
+### Validation sur données simulées
 
-        Mélange de 3 gaussiennes, alpha = (0.4, 0.4, 0.2), m = (-2, 0, 2), v = (0.3, 0.2, 0.2), n = 1000.
-        Convergence en **45 itérations** :
+Mélange de 3 gaussiennes, alpha = (0.4, 0.4, 0.2), m = (-2, 0, 2), v = (0.3, 0.2, 0.2), n = 1000.
+Convergence en **45 itérations** :
 
-        | Composante | alpha estimé (vrai) | m estimé (vrai) | v estimé (vrai) |
-        |---|---|---|---|
-        | 1 | 0.386 (0.4) | -2.027 (-2) | 0.340 (0.3) |
-        | 2 | 0.397 (0.4) | 0.003 (0) | 0.213 (0.2) |
-        | 3 | 0.217 (0.2) | 2.001 (2) | 0.195 (0.2) |
+| Composante | alpha estimé (vrai) | m estimé (vrai) | v estimé (vrai) |
+|---|---|---|---|
+| 1 | 0.386 (0.4) | -2.027 (-2) | 0.340 (0.3) |
+| 2 | 0.397 (0.4) | 0.003 (0) | 0.213 (0.2) |
+| 3 | 0.217 (0.2) | 2.001 (2) | 0.195 (0.2) |
 
-        Erreurs sur les moyennes **inférieures à 0.03**. Validation par test de **Kolmogorov-Smirnov** : D = 0.0105, p = 0.9999.
+Erreurs sur les moyennes **inférieures à 0.03**. Validation par test de **Kolmogorov-Smirnov** : D = 0.0105, p = 0.9999.
 
-        ### Influence du nombre de composantes
+### Influence du nombre de composantes
 
-        Avec 5 composantes bien séparées, l'algorithme converge en **20 itérations** avec des erreurs inférieures à 0.05 sur les moyennes (D = 0.021, p = 0.75). L'EM reste performant quand le nombre de composantes augmente, **à condition qu'elles soient suffisamment séparées**.
+Avec 5 composantes bien séparées, l'algorithme converge en **20 itérations** avec des erreurs inférieures à 0.05 sur les moyennes (D = 0.021, p = 0.75). L'EM reste performant quand le nombre de composantes augmente, **à condition qu'elles soient suffisamment séparées**.
 
-        ### Limite : composantes proches
+### Limite : composantes proches
 
-        Avec m = (0.5, 1, 1.5) — moyennes espacées de seulement 0.5 — l'algorithme converge mais les paramètres sont **sensiblement biaisés** (erreur de 0.08 sur alpha et 0.19 sur m pour la première composante). Le test de KS donne pourtant p = 0.12 : le mélange global reste un bon ajustement.
+Avec m = (0.5, 1, 1.5) — moyennes espacées de seulement 0.5 — l'algorithme converge mais les paramètres sont **sensiblement biaisés** (erreur de 0.08 sur alpha et 0.19 sur m pour la première composante). Le test de KS donne pourtant p = 0.12 : le mélange global reste un bon ajustement.
 
-        L'EM reproduit donc correctement la forme globale de la distribution mais échoue à identifier chaque composante individuellement. C'est un **problème d'identifiabilité structurel**, pas un défaut de l'algorithme.
+L'EM reproduit donc correctement la forme globale de la distribution mais échoue à identifier chaque composante individuellement. C'est un **problème d'identifiabilité structurel**, pas un défaut de l'algorithme.
 
-        Augmenter l'échantillon de n = 1000 à n = 40 000 améliore les moyennes (0.428, 0.946, 1.397) mais les proportions restent biaisées (0.307 au lieu de 0.4) — pour un coût qui passe de 3 secondes à près d'une minute.
+Augmenter l'échantillon de n = 1000 à n = 40 000 améliore les moyennes (0.428, 0.946, 1.397) mais les proportions restent biaisées (0.307 au lieu de 0.4) — pour un coût qui passe de 3 secondes à près d'une minute.
 
-        ### Permutation des étiquettes
+### Permutation des étiquettes
 
-        La vraisemblance étant invariante par permutation des indices, l'algorithme retrouve parfaitement les trois groupes mais leur attribue une **numérotation arbitraire**. L'EM sépare les groupes sans pouvoir leur donner un sens.
+La vraisemblance étant invariante par permutation des indices, l'algorithme retrouve parfaitement les trois groupes mais leur attribue une **numérotation arbitraire**. L'EM sépare les groupes sans pouvoir leur donner un sens.
 
+### Application au dataset Iris
 
-        La vraisemblance étant invariante par permutation des indices, l'algorithme retrouve parfaitement les trois groupes mais leur attribue une **numérotation arbitraire**. L'EM sépare les groupes sans pouvoir leur donner un sens.
+150 fleurs, 3 espèces. On masque la variable Species et on laisse l'EM retrouver les groupes à partir de la seule variable PetalWidthCm, la plus discriminante :
 
-        ### Application au dataset Iris
+| Composante | alpha | m | v | Espèce correspondante |
+|---|---|---|---|---|
+| 1 | 0.327 | 0.237 | 0.009 | Iris setosa |
+| 2 | 0.395 | 1.369 | 0.065 | Iris versicolor |
+| 3 | 0.278 | 2.087 | 0.060 | Iris virginica |
 
-        150 fleurs, 3 espèces. On masque la variable Species et on laisse l'EM retrouver les groupes à partir de la seule variable PetalWidthCm, la plus discriminante :
+Les proportions estimées sont proches d'un tiers chacune, cohérent avec la composition équilibrée du dataset (50 observations par espèce).
 
-        | Composante | alpha | m | v | Espèce correspondante |
-        |---|---|---|---|---|
-        | 1 | 0.327 | 0.237 | 0.009 | Iris setosa |
-        | 2 | 0.395 | 1.369 | 0.065 | Iris versicolor |
-        | 3 | 0.278 | 2.087 | 0.060 | Iris virginica |
+---
 
-        Les proportions estimées sont proches d'un tiers chacune, cohérent avec la composition équilibrée du dataset (50 observations par espèce).
+## Exécution
 
-        ---
+Aucune dépendance externe : le code n'utilise que les fonctions de base de R (dnorm, rnorm, runif).
 
-        ## Exécution
+```bash
+Rscript code/em_3_gaussiennes.R
+Rscript code/em_5_gaussiennes.R
+Rscript code/em_3_gaussiennes_proches.R
+```
 
-        Aucune dépendance externe : le code n'utilise que les fonctions de base de R (dnorm, rnorm, runif).
+Pour l'application Iris, le script lit Iris.csv dans son propre dossier :
 
-        ```bash
-        Rscript code/em_3_gaussiennes.R
-        Rscript code/em_5_gaussiennes.R
-        Rscript code/em_3_gaussiennes_proches.R
-        ```
+```bash
+cd code/iris && Rscript iris_em.R
+```
 
-        Pour l'application Iris, le script lit Iris.csv dans son propre dossier :
+---
 
-        ```bash
-        cd code/iris && Rscript iris_em.R
-        ```
+## Références
 
-        ---
+1. A. P. Dempster, N. M. Laird, D. B. Rubin, *Maximum Likelihood from Incomplete Data via the EM Algorithm*, Journal of the Royal Statistical Society: Series B, 39(1), 1–38, 1977.
+2. C. F. J. Wu, *On the Convergence Properties of the EM Algorithm*, The Annals of Statistics, 11(1), 95–103, 1983.
+3. D. Chafaï, F. Malrieu, *Recueil de modèles aléatoires*, Springer, Mathématiques et Applications, vol. 78, 2016.
 
-        ## Références
+Le dataset Iris (R. A. Fisher, 1936) provient de [Kaggle](https://www.kaggle.com/datasets/uciml/iris).
 
-        1. A. P. Dempster, N. M. Laird, D. B. Rubin, *Maximum Likelihood from Incomplete Data via the EM Algorithm*, Journal of the Royal Statistical Society: Series B, 39(1), 1–38, 1977.
-        2. C. F. J. Wu, *On the Convergence Properties of the EM Algorithm*, The Annals of Statistics, 11(1), 95–103, 1983.
-        3. D. Chafaï, F. Malrieu, *Recueil de modèles aléatoires*, Springer, Mathématiques et Applications, vol. 78, 2016.
+---
 
-        Le dataset Iris (R. A. Fisher, 1936) provient de [Kaggle](https://www.kaggle.com/datasets/uciml/iris).
+## Auteurs
 
-        ---
+**Marouane Rida Zaki** et **Mohammed-Amine Chnidguira**
+M1 IMSD — Université de Lorraine
 
-        ## Auteurs
-
-        **Marouane Rida Zaki** et **Mohammed-Amine Chnidguira**
-        M1 IMSD — Université de Lorraine
-
-        Encadrant : **Nathan Gillot**
-        
+Encadrant : **Nathan Gillot**
