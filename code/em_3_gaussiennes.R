@@ -25,6 +25,7 @@ estm_obs = function(n) {
   return(X)
 }
 
+set.seed(42)   # reproductibilite
 X = estm_obs(n)
 
 
@@ -186,6 +187,9 @@ x_seq    = seq(-5, 5, by = 0.01)
 # Dégradé du clair (début) au foncé (convergence)
 couleurs_etapes = colorRampPalette(c("lightblue", "darkblue"))(n_etapes)
 
+dir.create("../figures", showWarnings = FALSE)
+png("../figures/convergence_em.png", width = 1350, height = 825, res = 150)
+
 ## Graphique : évolution des composantes gaussiennes
 plot(x_seq, gauss(x_seq, mu_list[[1]][1], var_list[[1]][1]),
      type = "l", col = couleurs_etapes[1], lwd = 2,
@@ -211,3 +215,5 @@ legend("topright",
        legend = c(paste("Itération", iter_stock), "Vraies densités"),
        col = c(couleurs_etapes, "red"),
        lty = c(rep(1, n_etapes), 2), lwd = 2, cex = 0.7)
+
+dev.off()

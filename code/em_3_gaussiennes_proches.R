@@ -25,6 +25,7 @@ estm_obs = function(n) {
   return(X)
 }
 
+set.seed(42)   # reproductibilite
 X = estm_obs(n)
 
 
